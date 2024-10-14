@@ -910,9 +910,10 @@ class ModelTpServer:
                     or len(req.output_ids) == 1
                 )
             ):
-                self.time_e2e_requests.append(req.finished_time - req.created_time)
-                self.time_waiting_requests.append(req.queued_time - req.created_time)
-                self.time_decode_requests.append(req.finished_time - req.started_time)
+                if not req.stream:
+                    self.time_e2e_requests.append(req.finished_time - req.created_time)
+                    self.time_waiting_requests.append(req.queued_time - req.created_time)
+                    self.time_decode_requests.append(req.finished_time - req.started_time)
                 output_rids.append(req.rid)
                 output_finished_reason.append(req.finished_reason)
                 if self.model_runner.is_generation:
